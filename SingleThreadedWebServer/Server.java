@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 public class Server {
     
     public void run() throws IOException, UnknownHostException{
-        int port = 8010;
+        int port = 8010; //Where Server will listen
         ServerSocket socket = new ServerSocket(port);
         socket.setSoTimeout(20000);
         while(true){

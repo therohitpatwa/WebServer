@@ -23,7 +23,8 @@ public class Client {
                     ) {
                         toSocket.println("Hello from Client " + socket.getLocalSocketAddress());
                         String line = fromSocket.readLine();
-                        System.out.println("Response from Server " + line);
+                        int i=0;
+                        System.out.println("Response from Server " + ++i+ line);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -38,7 +39,7 @@ public class Client {
     
     public static void main(String[] args){
         Client client = new Client();
-        for(int i=0; i<60000; i++){
+        for(int i=0; i<100; i++){
             try{
                 Thread thread = new Thread(client.getRunnable());
                 thread.start();
