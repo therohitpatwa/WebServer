@@ -7,38 +7,8 @@ import java.util.function.Consumer;
 public class Server {
     public Consumer<Socket> getConsumer() {
         return (clientSocket) -> {
-            try (
-                BufferedReader fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter toClient = new PrintWriter(clientSocket.getOutputStream())
-            ) {
-                String requestLine = fromClient.readLine();
-                if (requestLine != null) {
-                    String[] requestParts = requestLine.split(" ");
-                    if (requestParts.length >= 2 && requestParts[0].equals("GET")) {
-                        String filePath = requestParts[1];
-                        if (filePath.equals("/")) {
-                            filePath = "/index.html";
-                        }
-
-                        java.io.File file = new java.io.File("www" + filePath);
-                        if (file.exists() && !file.isDirectory()) {
-                            toClient.println("HTTP/1.1 200 OK");
-                            toClient.println("Content-Type: text/html");
-                            toClient.println("Content-Length: " + file.length());
-                            toClient.println(); 
-
-                            try (BufferedReader fileReader = new BufferedReader(new java.io.FileReader(file))) {
-                                String line;
-                                while ((line = fileReader.readLine()) != null) {
-                                    toClient.println(line);
-                                }
-                            }
-                        } else {
-                            toClient.println("HTTP/1.1 404 Not Found");
-                            toClient.println();
-                        }
-                    }
-                }
+            try (PrintWriter toSocket = new PrintWriter(clientSocket.getOutputStream(), true)) {
+                toSocket.println("Hello from server " + clientSocket.getInetAddress());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
